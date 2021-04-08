@@ -14,11 +14,11 @@ namespace Conesoft.Hosting
 
         public static Directory Root { get; private set; }
 
-        public static Directory GlobalSettings => Root / "Settings" / HostingType;
-        public static Directory LocalSettings => GlobalSettings / Domain / Subdomain;
+        public static File GlobalSettings => Root / "Settings" / HostingType / Filename.From("settings", "json");
+        public static File LocalSettings => Root / "Settings" / HostingType / Domain / Subdomain / Filename.From("settings", "json");
 
         public static Directory GlobalStorage => Root / "Storage" / HostingType;
-        public static Directory LocalStorage => GlobalStorage / Domain / Subdomain;
+        public static Directory LocalStorage => Root / "Storage" / HostingType / Domain / Subdomain;
 
         static string[] currentSubdirectories;
 
@@ -69,10 +69,8 @@ namespace Conesoft.Hosting
             return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hosting, configuration) =>
                 {
-                    var localSettings = LocalSettings / Filename.From("settings", "json");
-                    var globalSettings = GlobalSettings / Filename.From("settings", "json");
-                    configuration.AddJsonFile(localSettings.Path, optional: true, reloadOnChange: true);
-                    configuration.AddJsonFile(globalSettings.Path, optional: true, reloadOnChange: true);
+                    configuration.AddJsonFile(LocalSettings.Path, optional: true, reloadOnChange: true);
+                    configuration.AddJsonFile(GlobalSettings.Path, optional: true, reloadOnChange: true);
                 });
         }
     }
