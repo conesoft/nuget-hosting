@@ -7,6 +7,7 @@
     <Version>0.1</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
