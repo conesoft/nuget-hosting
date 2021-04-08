@@ -15,6 +15,7 @@ namespace Conesoft.Hosting
         public static Directory Root { get; private set; }
 
         public static Directory Settings => Root / "Settings" / HostingType / Domain / Subdomain;
+        public static Directory Storage => Root / "Storage" / HostingType / Domain / Subdomain;
 
         static string[] CurrentSubdirectories { get; set; }
 
