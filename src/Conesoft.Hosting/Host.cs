@@ -20,7 +20,7 @@ namespace Conesoft.Hosting
         public static Directory GlobalStorage => Root / "Storage" / HostingType;
         public static Directory LocalStorage => Root / "Storage" / HostingType / Domain / Subdomain;
 
-        static string[] currentSubdirectories;
+        static readonly string[] currentSubdirectories;
 
         public static string Domain { get; private set; }
         public static string Subdomain { get; private set; }
@@ -30,7 +30,7 @@ namespace Conesoft.Hosting
         {
             var directory = Directory.Common.Current;
 
-            if (directory.Filtered("Deploy*.pubxml", allDirectories: true).First() is File file)
+            if (directory.Filtered("Deploy*.pubxml", allDirectories: true).FirstOrDefault() is File file)
             {
                 //file.ReadText();
                 var content = System.IO.File.ReadAllText(file.Path); // no async allowed here :( oldschool
