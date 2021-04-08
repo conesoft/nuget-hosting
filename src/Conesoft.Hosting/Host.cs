@@ -14,10 +14,13 @@ namespace Conesoft.Hosting
 
         public static Directory Root { get; private set; }
 
-        public static Directory Settings => Root / "Settings" / HostingType / Domain / Subdomain;
-        public static Directory Storage => Root / "Storage" / HostingType / Domain / Subdomain;
+        public static Directory GlobalSettings => Root / "Settings" / HostingType;
+        public static Directory LocalSettings => GlobalSettings / Domain / Subdomain;
 
-        static string[] CurrentSubdirectories { get; set; }
+        public static Directory GlobalStorage => Root / "Storage" / HostingType;
+        public static Directory LocalStorage => GlobalStorage / Domain / Subdomain;
+
+        static string[] currentSubdirectories;
 
         public static string Domain { get; private set; }
         public static string Subdomain { get; private set; }
@@ -47,11 +50,11 @@ namespace Conesoft.Hosting
                 directory = directory.Parent;
             }
 
-            CurrentSubdirectories = subs.ToArray();
+            currentSubdirectories = subs.ToArray();
 
-            Subdomain = CurrentSubdirectories.Last();
-            Domain = CurrentSubdirectories.SkipLast(1).Last();
-            HostingType = CurrentSubdirectories.SkipLast(2).Last();
+            Subdomain = currentSubdirectories.Last();
+            Domain = currentSubdirectories.SkipLast(1).Last();
+            HostingType = currentSubdirectories.SkipLast(2).Last();
 
             Root = directory;
 
@@ -66,8 +69,10 @@ namespace Conesoft.Hosting
             return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hosting, configuration) =>
                 {
-                    var settings = Settings / Filename.From("settings", "json");
-                    configuration.AddJsonFile(settings.Path, optional: true, reloadOnChange: true);
+                    var localSettings = LocalSettings / Filename.From("settings", "json");
+                    var globalSettings = GlobalSettings / Filename.From("settings", "json");
+                    configuration.AddJsonFile(localSettings.Path, optional: true, reloadOnChange: true);
+                    configuration.AddJsonFile(globalSettings.Path, optional: true, reloadOnChange: true);
                 });
         }
     }
