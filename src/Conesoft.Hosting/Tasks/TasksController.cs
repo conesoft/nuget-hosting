@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Conesoft.Files;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,7 @@ namespace Conesoft.Hosting.Tasks
         }
 
         [HttpGet("all.json")]
-        public IActionResult GetAll() => File("wwwroot/tasks/all.json", "text/json");
+        public IActionResult GetAll([FromServices] IWebHostEnvironment webHostEnvironment) => File((Directory.From(webHostEnvironment.WebRootPath) / "Tasks" / Filename.From("all", "json")).Path, "text/json");
 
         public class JsonContent
         {
