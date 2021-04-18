@@ -22,6 +22,9 @@ namespace Conesoft.Hosting.Tasks
             return BadRequest();
         }
 
+        [HttpGet("all.json")]
+        public IActionResult GetAll() => File("wwwroot/tasks/all.json", "text/json");
+
         public class JsonContent
         {
             public string AccessToken { get; set; }
