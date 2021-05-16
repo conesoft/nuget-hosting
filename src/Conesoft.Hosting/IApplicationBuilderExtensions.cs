@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using System.Linq;
+using System.Net.Http;
 
 namespace Conesoft.Hosting
 {
     public static class IApplicationBuilderExtensions
     {
         static readonly string[] contentTypes = new[] { "text", "json", "xml" };
-        public static IApplicationBuilder UseHostingDefaults(this IApplicationBuilder app, bool useDefaultFiles, bool useStaticFiles)
+        public static IApplicationBuilder UseHostingDefaults(this IApplicationBuilder app, bool connectToHost, bool useDefaultFiles, bool useStaticFiles)
         {
             app.Use(async (context, next) =>
             {
@@ -15,10 +16,26 @@ namespace Conesoft.Hosting
                 await next.Invoke();
             });
 
+            if(connectToHost)
+            {
+                app.UsePortReporter(async port =>
+                {
+                    var args = System.Environment.GetCommandLineArgs();
+                    if (args.FirstOrDefault(arg => arg.StartsWith("--conesoft-host-register=")) is string hosting)
+                    {
+                        var registrationCommand = hosting.Split("=")[1];
+
+                        using var client = new HttpClient();
+                        await client.GetAsync($"{registrationCommand}?site={"davepermen.net"}&port={port}");
+                    }
+                });
+            }
+
             if (useDefaultFiles)
             {
                 app.UseDefaultFiles();
             }
+
             if (useStaticFiles)
             {
                 app.UseStaticFiles(new StaticFileOptions
