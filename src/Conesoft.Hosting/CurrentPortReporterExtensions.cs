@@ -12,14 +12,14 @@ namespace Conesoft.Hosting
         public static IApplicationBuilder UsePortReporter(this IApplicationBuilder app, Action<int> handlePort)
         {
             var reporter = app.ApplicationServices.GetService<CurrentPortReporter>();
-            reporter.HandlePort(handler: handlePort);
+            reporter!.HandlePort(handler: handlePort);
             return app;
         }
 
         public static IApplicationBuilder UsePortReporter(this IApplicationBuilder app, Func<int, Task> handlePort)
         {
             var reporter = app.ApplicationServices.GetService<CurrentPortReporter>();
-            reporter.HandlePort(handler: handlePort);
+            reporter!.HandlePort(handler: handlePort);
             return app;
         }
     }

@@ -4,10 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Conesoft.Hosting</RootNamespace>
-    <Version>0.5.4</Version>
+    <Version>0.5.5</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <IsPackable>true</IsPackable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

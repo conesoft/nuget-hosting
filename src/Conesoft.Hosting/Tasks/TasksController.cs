@@ -29,7 +29,7 @@ namespace Conesoft.Hosting.Tasks
 
         public class JsonContent
         {
-            public string AccessToken { get; set; }
+            public string AccessToken { get; set; } = "";
         }
     }
 }

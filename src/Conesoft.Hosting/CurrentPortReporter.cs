@@ -10,7 +10,7 @@ namespace Conesoft.Hosting
     class CurrentPortReporter
     {
         int port = 0;
-        private Action<int> onPortSet;
+        private Action<int> onPortSet = _ => { };
         private bool onPortSetCalled = false;
 
         public CurrentPortReporter(IServer server, IHostApplicationLifetime lifetime)

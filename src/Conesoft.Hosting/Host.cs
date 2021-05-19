@@ -35,12 +35,24 @@ namespace Conesoft.Hosting
                 //file.ReadText();
                 var content = System.IO.File.ReadAllText(file.Path); // no async allowed here :( oldschool
 
-                var tags = (beginning: "<PublishUrl>", end: "</PublishUrl>");
-                var indicees = (beginning: content.IndexOf(tags.beginning) + tags.beginning.Length, end: content.IndexOf(tags.end));
+                static string? ExtractTagContents(string content, string tagNameWithoutBrackets)
+                {
+                    var tags = (beginning: $"<{tagNameWithoutBrackets}>", end: $"</{tagNameWithoutBrackets}>");
+                    var indicees = (beginning: content.IndexOf(tags.beginning), end: content.IndexOf(tags.end));
 
-                var path = content[indicees.beginning..indicees.end];
+                    return indicees.beginning >= 0 && indicees.end >= 0
+                        ? content[(indicees.beginning + tags.beginning.Length)..indicees.end]
+                        : null;
+                }
 
-                directory = Directory.From(path);
+                if(ExtractTagContents(content, "PublishUrl") is string path)
+                {
+                    directory = Directory.From(path);
+                }
+                if(ExtractTagContents(content, "PackageLocation") is string zipfile)
+                {
+                    directory = File.From(zipfile).Parent;
+                }
             }
 
             var subs = new Stack<string>();
