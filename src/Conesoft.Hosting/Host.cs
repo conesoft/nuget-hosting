@@ -30,7 +30,7 @@ namespace Conesoft.Hosting
         {
             var directory = Directory.Common.Current;
 
-            if (directory.Filtered("Deploy*.pubxml", allDirectories: true).FirstOrDefault() is File file)
+            if (directory.Filtered("Deploy.pubxml", allDirectories: true).FirstOrDefault() is File file)
             {
                 //file.ReadText();
                 var content = System.IO.File.ReadAllText(file.Path); // no async allowed here :( oldschool
@@ -45,13 +45,9 @@ namespace Conesoft.Hosting
                         : null;
                 }
 
-                if(ExtractTagContents(content, "PublishUrl") is string path)
+                if(ExtractTagContents(content, "Hosting") is string hosting && ExtractTagContents(content, "Domain") is string domain)
                 {
-                    directory = Directory.From(path);
-                }
-                if(ExtractTagContents(content, "PackageLocation") is string zipfile)
-                {
-                    directory = File.From(zipfile).Parent;
+                    directory = Directory.From(hosting);
                 }
             }
 
