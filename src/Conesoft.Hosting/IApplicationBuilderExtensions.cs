@@ -26,7 +26,7 @@ namespace Conesoft.Hosting
                         var registrationCommand = hosting.Split("=")[1];
 
                         using var client = new HttpClient();
-                        await client.GetAsync($"{registrationCommand}?site={"davepermen.net"}&port={port}");
+                        await client.GetAsync($"{registrationCommand}?site={Host.FullDomain}&port={port}");
                     }
                 });
             }
