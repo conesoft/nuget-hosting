@@ -20,11 +20,10 @@ namespace Conesoft.Hosting
         public static Directory GlobalStorage => Root / "Storage" / HostingType;
         public static Directory LocalStorage => Root / "Storage" / HostingType / Domain / Subdomain;
 
-        static readonly string[] currentSubdirectories;
-
         public static string Domain { get; private set; }
         public static string Subdomain { get; private set; }
-        public static string HostingType { get; private set; }
+        public static string FullDomain => (Subdomain.ToLowerInvariant() == "main" ? Domain : $"{Subdomain}.{Domain}").ToLowerInvariant();
+        public static string HostingType { get; } = "Websites";
 
         static Host()
         {
@@ -47,29 +46,48 @@ namespace Conesoft.Hosting
 
                 if(ExtractTagContents(content, "Hosting") is string hosting && ExtractTagContents(content, "Domain") is string domain)
                 {
-                    directory = Directory.From(hosting);
+                    var segments = GetDomainSegments(domain);
+
+                    Subdomain = segments.subdomain;
+                    Domain = segments.domain;
+
+                    Root = Directory.From(hosting);
+
+                    while (Root.Name != HostingDirectoryName && Root.Info.Parent != null)
+                    {
+                        Root = Root.Parent;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Running in Debug? Publish Profile not properly configured");
                 }
             }
-
-            var subs = new Stack<string>();
-            while (directory.Name != HostingDirectoryName && directory.Info.Parent != null)
+            else
             {
-                subs.Push(directory.Name);
-                directory = directory.Parent;
+                var subs = new Stack<string>();
+                while (directory.Name != HostingDirectoryName && directory.Info.Parent != null)
+                {
+                    subs.Push(directory.Name);
+                    directory = directory.Parent;
+                }
+
+                var currentSubdirectories = subs.ToArray();
+
+                Subdomain = currentSubdirectories.Last();
+                Domain = currentSubdirectories.SkipLast(1).Last();
+
+                Root = directory;
             }
+        }
 
-            currentSubdirectories = subs.ToArray();
+        static (string domain, string subdomain) GetDomainSegments(string name)
+        {
+            var domainSegments = name.Split('.').ToArray();
+            var domain = $"{domainSegments.SkipLast(1).Last()}.{domainSegments.Last()}";
+            var subdomain = domainSegments.Length == 3 ? domainSegments.First() : "main";
 
-            Subdomain = currentSubdirectories.Last();
-            Domain = currentSubdirectories.SkipLast(1).Last();
-            HostingType = currentSubdirectories.SkipLast(2).Last();
-
-            Root = directory;
-
-            if (Root.Name != HostingDirectoryName)
-            {
-                throw new Exception("Running in Debug? Publish Profile not properly configured");
-            }
+            return (domain, subdomain);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)

@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Conesoft.Hosting</RootNamespace>
-    <Version>0.5.6</Version>
+    <Version>0.5.7</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <IsPackable>true</IsPackable>
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Conesoft.Files" Version="1.4.2" />
+    <PackageReference Include="Conesoft.Files" Version="1.5.3" />
   </ItemGroup>
 
 </Project>
