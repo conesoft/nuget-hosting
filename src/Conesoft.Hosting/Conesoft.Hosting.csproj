@@ -6,19 +6,28 @@
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <RootNamespace>Conesoft.Hosting</RootNamespace>
-    <Version>0.5.9</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.5.10</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <PackageIcon>Conesoft.forNuget.x256.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/conesoft/letsencrypt</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/conesoft/files</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>default settings for locally hosted aspnet pages</Description>
+    <PackageTags>library dotnet-core</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Conesoft.forNuget.x256.png" Pack="true" PackagePath="" />
+    <None Include="Conesoft.forNuget.x256.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Conesoft.Files" Version="1.5.9" />
+    <PackageReference Include="Conesoft.Files" Version="1.5.15" />
   </ItemGroup>
 
 </Project>
