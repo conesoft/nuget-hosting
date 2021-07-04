@@ -17,11 +17,14 @@ namespace Conesoft.Hosting
         public static File GlobalSettings => Root / "Settings" / HostingType / Filename.From("settings", "json");
         public static File LocalSettings => Root / "Settings" / HostingType / Domain / Subdomain / Filename.From("settings", "json");
 
+        public static File GlobalConfiguration => Root / "Settings" / Filename.From("hosting", "json");
+
         public static Directory GlobalStorage => Root / "Storage" / HostingType;
         public static Directory LocalStorage => Root / "Storage" / HostingType / Domain / Subdomain;
 
-        public static string Domain { get; private set; }
-        public static string Subdomain { get; private set; }
+        public static string Name { get; private set; } = "";
+        public static string Domain { get; private set; } = "";
+        public static string Subdomain { get; private set; } = "";
         public static string FullDomain => (Subdomain.ToLowerInvariant() == "main" ? Domain : $"{Subdomain}.{Domain}").ToLowerInvariant();
         public static string HostingType { get; } = "Websites";
 
@@ -44,12 +47,24 @@ namespace Conesoft.Hosting
                         : null;
                 }
 
-                if(ExtractTagContents(content, "Hosting") is string hosting && ExtractTagContents(content, "Domain") is string domain)
+                if(ExtractTagContents(content, "Hosting") is string hosting)
                 {
-                    var segments = GetDomainSegments(domain);
+                    if(ExtractTagContents(content, "Domain") is string domain)
+                    {
+                        var segments = GetDomainSegments(domain);
 
-                    Subdomain = segments.subdomain;
-                    Domain = segments.domain;
+                        Subdomain = segments.subdomain;
+                        Domain = segments.domain;
+
+                        Name = segments.domain;
+                    }
+                    else if(ExtractTagContents(content, "Name") is string name)
+                    {
+                        Subdomain = "";
+                        Domain = "";
+
+                        Name = name;
+                    }
 
                     Root = Directory.From(hosting);
 
@@ -73,6 +88,8 @@ namespace Conesoft.Hosting
                 }
 
                 var currentSubdirectories = subs.ToArray();
+
+                Name = currentSubdirectories.Last();
 
                 Subdomain = currentSubdirectories.Last();
                 Domain = currentSubdirectories.SkipLast(1).Last();
