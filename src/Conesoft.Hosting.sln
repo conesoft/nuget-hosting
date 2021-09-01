@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conesoft.Hosting", "Conesoft.Hosting\Conesoft.Hosting.csproj", "{E504D482-B63E-4D4B-AC2C-C3642DD1EFE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conesoft.Hosting", "Conesoft.Hosting.csproj", "{E504D482-B63E-4D4B-AC2C-C3642DD1EFE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
