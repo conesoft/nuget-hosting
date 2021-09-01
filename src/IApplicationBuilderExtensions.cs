@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using System.Linq;
-using System.Net.Http;
 
 namespace Conesoft.Hosting
 {
