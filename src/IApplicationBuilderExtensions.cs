@@ -28,7 +28,7 @@ namespace Conesoft.Hosting
                     {
                         if (context.Context.Response.Headers["Content-Type"].Count > 0)
                         {
-                            var contentType = context.Context.Response.Headers["Content-Type"][0];
+                            var contentType = context.Context.Response.Headers["Content-Type"][0] ?? "";
                             if (contentTypes.Any(type => contentType.Contains(type)))
                             {
                                 context.Context.Response.Headers["Content-Type"] = contentType + "; charset=utf-8";

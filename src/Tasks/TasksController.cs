@@ -25,7 +25,7 @@ namespace Conesoft.Hosting.Tasks
         }
 
         [HttpGet("all.json")]
-        public async Task<IActionResult> GetAll([FromServices] IWebHostEnvironment env) =>  Content(await (Directory.From(env.WebRootPath) / "tasks" / Filename.From("all", "json")).ReadText(), "text/json");
+        public async Task<IActionResult> GetAll([FromServices] IWebHostEnvironment env) =>  Content(await (Directory.From(env.WebRootPath) / "tasks" / Filename.From("all", "json")).ReadText() ?? "", "text/json");
 
         public class JsonContent
         {

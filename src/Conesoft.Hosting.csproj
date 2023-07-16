@@ -1,15 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <OutputType>Library</OutputType>
-    <IsPackable>true</IsPackable>
-    <RootNamespace>Conesoft.Hosting</RootNamespace>
+    <TargetFramework>net7.0</TargetFramework>
+	  <RootNamespace>Conesoft.Hosting</RootNamespace>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.6.2</Version>
+    <Version>1.0.0</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <PackageIcon>Conesoft.forNuget.x256.png</PackageIcon>
@@ -26,8 +24,12 @@
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Conesoft.Files" Version="1.6.4" />
+    <PackageReference Include="Conesoft.Files" Version="1.7.6" />
   </ItemGroup>
 
 </Project>
