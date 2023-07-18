@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <PackageIcon>Conesoft.forNuget.x256.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/conesoft/hosting</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/conesoft/nuget-hosting</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>default settings for locally hosted aspnet pages</Description>
