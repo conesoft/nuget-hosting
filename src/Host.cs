@@ -121,13 +121,10 @@ public static class Host
 
     public static IServiceCollection AddUsersWithStorage(this IServiceCollection services)
     {
-        services.AddUsers("Conesoft.Host.User", (GlobalStorage / "Users").Path);
+        var directory = GlobalStorage / "Users";
+        services.AddUsers("Conesoft.Host.User", directory.Path);
         return services;
     }
 
-    public static WebApplication MapUsersWithStorage(this WebApplication app)
-    {
-        app.MapUsers();
-        return app;
-    }
+    public static void MapUsersWithStorage(this WebApplication app) => app.MapUsers();
 }
