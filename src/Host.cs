@@ -2,6 +2,7 @@
 using Conesoft.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -118,9 +119,18 @@ public static class Host
             });
     }
 
-    public static WebApplicationBuilder AddUsersWithStorage(this WebApplicationBuilder builder)
+    public static IServiceCollection AddUsersWithStorage(this IServiceCollection services)
     {
-        builder.Services.AddUsers("Conesoft.Host.User", (GlobalStorage / "Users").Path);
+        services.AddUsers("Conesoft.Host.User", (GlobalStorage / "Users").Path);
+        return services;
+    }
+
+    public static IApplicationBuilder MapUsersWithStorage(this IApplicationBuilder builder)
+    {
+        if(builder is WebApplication app)
+        {
+            app.MapUsers();
+        }
         return builder;
     }
 }
