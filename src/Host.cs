@@ -49,9 +49,9 @@ public static class Host
                     : null;
             }
 
-            if(ExtractTagContents(content, "Hosting") is string hosting)
+            if (ExtractTagContents(content, "Hosting") is string hosting)
             {
-                if(ExtractTagContents(content, "Domain") is string domain)
+                if (ExtractTagContents(content, "Domain") is string domain)
                 {
                     var segments = GetDomainSegments(domain);
 
@@ -60,7 +60,7 @@ public static class Host
 
                     Name = segments.domain;
                 }
-                else if(ExtractTagContents(content, "Name") is string name)
+                else if (ExtractTagContents(content, "Name") is string name)
                 {
                     Subdomain = "";
                     Domain = "";
@@ -125,12 +125,9 @@ public static class Host
         return services;
     }
 
-    public static IApplicationBuilder MapUsersWithStorage(this IApplicationBuilder builder)
+    public static WebApplication MapUsersWithStorage(this WebApplication app)
     {
-        if(builder is WebApplication app)
-        {
-            app.MapUsers();
-        }
-        return builder;
+        app.MapUsers();
+        return app;
     }
 }
