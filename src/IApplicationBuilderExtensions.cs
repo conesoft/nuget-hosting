@@ -1,56 +1,55 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using System.Linq;
 
-namespace Conesoft.Hosting
+namespace Conesoft.Hosting;
+
+public static class IApplicationBuilderExtensions
 {
-    public static class IApplicationBuilderExtensions
+    static readonly string[] contentTypes = ["text", "json", "xml"];
+    public static IApplicationBuilder UseHostingDefaults(this IApplicationBuilder app, bool useDefaultFiles, bool useStaticFiles)
     {
-        static readonly string[] contentTypes = new[] { "text", "json", "xml" };
-        public static IApplicationBuilder UseHostingDefaults(this IApplicationBuilder app, bool useDefaultFiles, bool useStaticFiles)
+        app.Use(async (context, next) =>
         {
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("Content-Type", "text/html; charset=utf-8");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                await next.Invoke();
-            });
+            context.Response.Headers.ContentType = "text/html; charset=utf-8";
+            context.Response.Headers.XContentTypeOptions = "nosniff";
+            await next.Invoke();
+        });
 
-            if (useDefaultFiles)
-            {
-                app.UseDefaultFiles();
-            }
+        if (useDefaultFiles)
+        {
+            app.UseDefaultFiles();
+        }
 
-            if (useStaticFiles)
+        if (useStaticFiles)
+        {
+            app.UseStaticFiles(new StaticFileOptions
             {
-                app.UseStaticFiles(new StaticFileOptions
+                OnPrepareResponse = context =>
                 {
-                    OnPrepareResponse = context =>
+                    if (context.Context.Response.Headers.ContentType.Count > 0)
                     {
-                        if (context.Context.Response.Headers["Content-Type"].Count > 0)
+                        var contentType = context.Context.Response.Headers.ContentType[0] ?? "";
+                        if (contentTypes.Any(type => contentType.Contains(type)))
                         {
-                            var contentType = context.Context.Response.Headers["Content-Type"][0] ?? "";
-                            if (contentTypes.Any(type => contentType.Contains(type)))
-                            {
-                                context.Context.Response.Headers["Content-Type"] = contentType + "; charset=utf-8";
-                            }
-                        }
-                        if (context.Context.Response.Headers["Cache-Control"].Count == 0)
-                        {
-                            context.Context.Response.Headers.Add("Cache-Control", "max-age=31536000, immutable");
+                            context.Context.Response.Headers.ContentType = contentType + "; charset=utf-8";
                         }
                     }
-                });
-            }
-
-            app.Use(async (context, next) =>
-            {
-                if (context.Response.Headers["Cache-Control"].Count == 0)
-                {
-                    context.Response.Headers.Add("Cache-Control", "no-cache");
+                    if (context.Context.Response.Headers.CacheControl.Count == 0)
+                    {
+                        context.Context.Response.Headers.CacheControl = "max-age=31536000, immutable";
+                    }
                 }
-                await next.Invoke();
             });
-            return app;
         }
+
+        app.Use(async (context, next) =>
+        {
+            if (context.Response.Headers.CacheControl.Count == 0)
+            {
+                context.Response.Headers.CacheControl = "no-cache";
+            }
+            await next.Invoke();
+        });
+        return app;
     }
 }

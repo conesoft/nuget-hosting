@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Conesoft.Hosting.Tasks
+namespace Conesoft.Hosting.Tasks;
+
+public interface ITask
 {
-    public interface ITask
-    {
-        public Task Run();
-    }
+    public Task Run();
 }
