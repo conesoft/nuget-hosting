@@ -27,7 +27,7 @@ public static class Host
     public static string Name { get; private set; } = "";
     public static string Domain { get; private set; } = "";
     public static string Subdomain { get; private set; } = "";
-    public static string FullDomain => (Subdomain.ToLowerInvariant() == "main" ? Domain : $"{Subdomain}.{Domain}").ToLowerInvariant();
+    public static string FullDomain => (Subdomain.Equals("main", StringComparison.InvariantCultureIgnoreCase) ? Domain : $"{Subdomain}.{Domain}").ToLowerInvariant();
     public static string HostingType { get; } = "Websites";
 
     static Host()
@@ -62,8 +62,8 @@ public static class Host
                 }
                 else if (ExtractTagContents(content, "Name") is string name)
                 {
-                    Subdomain = "";
-                    Domain = "";
+                    Subdomain = "Services";
+                    Domain = name;
 
                     Name = name;
                 }
