@@ -62,8 +62,8 @@ public static class Host
                 }
                 else if (ExtractTagContents(content, "Name") is string name)
                 {
-                    Subdomain = "Services";
-                    Domain = name;
+                    Subdomain = name;
+                    Domain = "Services";
 
                     Name = name;
                 }
