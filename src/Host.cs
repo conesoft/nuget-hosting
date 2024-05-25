@@ -34,7 +34,7 @@ public static class Host
     {
         var directory = Directory.Common.Current;
 
-        if (directory.Filtered("Deploy.pubxml", allDirectories: true).FirstOrDefault() is File file)
+        if (directory.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault() is File file)
         {
             //file.ReadText();
             var content = System.IO.File.ReadAllText(file.Path); // no async allowed here :( oldschool
