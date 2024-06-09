@@ -61,6 +61,7 @@ public static class Host
                 {
                     Subdomain = name;
                     Domain = "Services";
+                    HostingType = "Services";
 
                     Name = name;
                 }
