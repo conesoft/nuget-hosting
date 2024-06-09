@@ -12,14 +12,12 @@ public static class LoggingExtensions
 {
     private static string ToTitleCase(this string text) => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.ToLowerInvariant());
 
-    public static IServiceCollection AddLoggingToHost(this IServiceCollection services)
+    public static HostedLoggingExtensionWrapper AddLogging(string logFilePath, string appName)
     {
-        var log = Host.Root / "Logs" / Filename.From($"{Host.HostingType} - {Host.Name.ToTitleCase()} - ", "txt");
-
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
             .WriteTo.File(
-                log.Path,
+                logFilePath,
                 buffered: false,
                 shared: true,
                 rollingInterval: RollingInterval.Day,
@@ -27,25 +25,64 @@ public static class LoggingExtensions
             )
             .CreateLogger();
 
-        Log.Information($"app '{Host.Name.ToTitleCase()}' starting up...");
+        Log.Information($"app '{appName.ToTitleCase()}' starting up...");
+
+        return new(appName);
+    }
+
+    public static IServiceCollection AddLoggingToHost(this IServiceCollection services)
+    {
+        var log = Host.Root / "Logs" / Filename.From($"{Host.HostingType} - {Host.Name.ToTitleCase()} - ", "txt");
+
+        AddLogging(log.Path, Host.Name);
 
         services.AddHostedService<HostedLoggingExtension>();
 
         return services;
     }
 
-    class HostedLoggingExtension : IHostedService
+    class HostedLoggingExtension() : IHostedService
     {
+        private readonly string? appName = null;
+        public HostedLoggingExtension(string appName) : this()
+        {
+            this.appName = appName.ToTitleCase();
+        }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Log.Information($"app '{Host.Name.ToTitleCase()}' started");
+            Log.Information($"app '{appName ?? Host.Name.ToTitleCase()}' started");
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            Log.Information($"app '{Host.Name.ToTitleCase()}' stopped");
+            Log.Information($"app '{appName ?? Host.Name.ToTitleCase()}' stopped");
             return Task.CompletedTask;
+        }
+    }
+
+    public class HostedLoggingExtensionWrapper() : IDisposable
+    {
+        private bool started = false;
+        private readonly HostedLoggingExtension wrapped = new();
+
+        public HostedLoggingExtensionWrapper(string appName) : this()
+        {
+            wrapped = new(appName);
+        }
+
+        public void Start()
+        {
+            wrapped.StartAsync(default);
+            started = true;
+        }
+
+        void IDisposable.Dispose()
+        {
+            if (started)
+            {
+                wrapped.StopAsync(default);
+            }
         }
     }
 }
