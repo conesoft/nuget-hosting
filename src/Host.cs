@@ -1,8 +1,5 @@
 ﻿using Conesoft.Files;
-using Conesoft.Users;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -118,13 +115,4 @@ public static class Host
                 configuration.AddJsonFile(GlobalSettings.Path, optional: true, reloadOnChange: true);
             });
     }
-
-    public static IServiceCollection AddUsersWithStorage(this IServiceCollection services)
-    {
-        var directory = GlobalStorage / "Users";
-        services.AddUsers("Conesoft.Host.User", directory.Path);
-        return services;
-    }
-
-    public static void MapUsersWithStorage(this WebApplication app) => app.MapUsers();
 }
