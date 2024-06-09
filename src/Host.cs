@@ -25,7 +25,7 @@ public static class Host
     public static string Domain { get; private set; } = "";
     public static string Subdomain { get; private set; } = "";
     public static string FullDomain => (Subdomain.Equals("main", StringComparison.InvariantCultureIgnoreCase) ? Domain : $"{Subdomain}.{Domain}").ToLowerInvariant();
-    public static string HostingType { get; } = "Websites";
+    public static string HostingType { get; private set; } = "Websites";
 
     static Host()
     {
