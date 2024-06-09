@@ -21,6 +21,7 @@ public static class LoggingExtensions
                 buffered: false,
                 shared: true,
                 rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: null,
                 flushToDiskInterval: TimeSpan.FromSeconds(1)
             )
             .CreateLogger();
