@@ -91,6 +91,11 @@ public static class Host
 
             Name = currentSubdirectories.Last();
 
+            if(currentSubdirectories.SkipLast(1).Last() == "Services")
+            {
+                HostingType = "Services";
+            }
+
             Subdomain = currentSubdirectories.Last();
             Domain = currentSubdirectories.SkipLast(1).Last();
 
