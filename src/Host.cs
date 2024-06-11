@@ -13,14 +13,23 @@ public static class Host
 
     public static Directory Root { get; private set; }
 
-    public static File GlobalSettings => Root / "Settings" / HostingType / Filename.From("settings", "json");
-    public static File LocalSettings => Root / "Settings" / HostingType / Domain / Subdomain / Filename.From("settings", "json");
+    public static File GlobalSettings => Root / "Settings" / Filename.From("settings", "json");
+    public static File LocalSettings => HostingType switch
+    {
+        "Websites" => Root / "Settings" / HostingType / Domain / Subdomain / Filename.From("settings", "json"),
+        "Services" => Root / "Settings" / HostingType / Name / Filename.From("settings", "json"),
+        _ => throw new Exception($"wrong hosting type {HostingType}")
+    };
 
     public static File GlobalConfiguration => Root / "Settings" / Filename.From("hosting", "json");
 
-    public static Directory GlobalStorage => Root / "Storage" / HostingType;
-    public static Directory LocalStorage => Root / "Storage" / HostingType / Domain / Subdomain;
-
+    public static Directory GlobalStorage => Root / "Storage";
+    public static Directory LocalStorage => HostingType switch
+    {
+        "Websites" => Root / "Storage" / HostingType / Domain / Subdomain,
+        "Services" => Root / "Storage" / HostingType / Name,
+        _ => throw new Exception($"wrong hosting type {HostingType}")
+    };
     public static string Name { get; private set; } = "";
     public static string Domain { get; private set; } = "";
     public static string Subdomain { get; private set; } = "";
