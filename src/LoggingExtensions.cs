@@ -34,7 +34,7 @@ public static class LoggingExtensions
     public static IServiceCollection AddLoggingToHost(this IServiceCollection services)
     {
         var name = Host.HostingType == "Websites" ?
-            $"{Host.HostingType} - {Host.FullDomain.ToTitleCase()}" :
+            $"{Host.HostingType} - {Host.FullDomain.ToLowerInvariant()}" :
             $"{Host.HostingType} - {Host.Name.ToTitleCase()}";
         var log = Host.Root / "Logs" / Filename.From($"{name} - ", "txt");
 
