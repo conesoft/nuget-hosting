@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting.Services;
 
+// based on https://stackoverflow.com/a/3634544
+
 public class GarbageCollect(TimeSpan period) : PeriodicTask(period)
 {
     protected override Task Process()
