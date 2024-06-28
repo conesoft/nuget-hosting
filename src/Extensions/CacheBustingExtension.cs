@@ -1,6 +1,7 @@
 ﻿using Conesoft.Hosting.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 
 namespace Conesoft.Hosting;
@@ -18,6 +19,7 @@ public static class CacheBustingExtension
             if (hash != abh.CompiledHashString)
             {
                 context.Response.Headers["Clear-Site-Data"] = "\"cache\"";
+                Log.Information($"clearing cache on client");
             }
         }
         context.Response.Cookies.Append(cookieName, abh.CompiledHashString, new()

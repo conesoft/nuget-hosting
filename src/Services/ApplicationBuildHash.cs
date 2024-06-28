@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.IO;
 
 namespace Conesoft.Hosting.Services;
@@ -25,6 +26,8 @@ public class ApplicationBuildHash
         {
             s?.Close();
         }
-        return BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset);
+        var hash = BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset);
+        Log.Information($"current app hash: {hash}");
+        return hash;
     }
 }
