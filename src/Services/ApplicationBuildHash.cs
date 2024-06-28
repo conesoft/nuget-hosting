@@ -27,7 +27,7 @@ public class ApplicationBuildHash
             s?.Close();
         }
         var hash = BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset);
-        Log.Information($"current app hash: {hash}");
+        Log.Information($"current app hash: {hash.ToString("X")}");
         return hash;
     }
 }
