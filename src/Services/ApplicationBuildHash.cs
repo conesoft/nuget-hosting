@@ -19,6 +19,7 @@ public class ApplicationBuildHash
         FileStream? s = null;
         try
         {
+            Log.Information("generating app hash for {application}", System.Reflection.Assembly.GetExecutingAssembly().Location);
             s = new FileStream(System.Reflection.Assembly.GetExecutingAssembly().Location, FileMode.Open, FileAccess.Read);
             s.Read(b, 0, 2048);
         }
@@ -27,7 +28,7 @@ public class ApplicationBuildHash
             s?.Close();
         }
         var hash = BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset);
-        Log.Information($"current app hash: {hash.ToString("X")}");
+        Log.Information($"current app hash: {hash:X}");
         return hash;
     }
 }
