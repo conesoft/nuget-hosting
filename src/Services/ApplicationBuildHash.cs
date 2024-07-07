@@ -19,8 +19,8 @@ public class ApplicationBuildHash
         FileStream? s = null;
         try
         {
-            Log.Information("generating app hash for {application}", System.Reflection.Assembly.GetExecutingAssembly().Location);
-            s = new FileStream(System.Reflection.Assembly.GetExecutingAssembly().Location, FileMode.Open, FileAccess.Read);
+            Log.Information("generating app hash for {application}", System.Reflection.Assembly.GetEntryAssembly()?.Location);
+            s = new FileStream(System.Reflection.Assembly.GetEntryAssembly()?.Location!, FileMode.Open, FileAccess.Read);
             s.Read(b, 0, 2048);
         }
         finally
