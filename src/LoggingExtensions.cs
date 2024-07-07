@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Formatting.Compact;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,12 +13,21 @@ public static class LoggingExtensions
 {
     private static string ToTitleCase(this string text) => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.ToLowerInvariant());
 
-    public static HostedLoggingExtensionWrapper AddLogging(string logFilePath, string appName)
+    public static HostedLoggingExtensionWrapper AddLogging(Directory logFilePath, string appName)
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
             .WriteTo.File(
-                logFilePath,
+                (logFilePath / Filename.From($"{appName} - ", "txt")).Path,
+                buffered: false,
+                shared: true,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: null,
+                flushToDiskInterval: TimeSpan.FromSeconds(1)
+            )
+            .WriteTo.File(
+                new CompactJsonFormatter(),
+                (logFilePath / Filename.From($"{appName} - ", "log")).Path,
                 buffered: false,
                 shared: true,
                 rollingInterval: RollingInterval.Day,
@@ -36,9 +46,9 @@ public static class LoggingExtensions
         var name = Host.HostingType == "Websites" ?
             $"{Host.HostingType} - {Host.FullDomain.ToLowerInvariant()}" :
             $"{Host.HostingType} - {Host.Name.ToTitleCase()}";
-        var log = Host.Root / "Logs" / Filename.From($"{name} - ", "txt");
+        var log = Host.Root / "Logs" / name;
 
-        AddLogging(log.Path, Host.Name);
+        AddLogging(log, Host.Name);
 
         services.AddHostedService<HostedLoggingExtension>();
 
