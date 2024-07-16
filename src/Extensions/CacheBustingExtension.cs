@@ -16,13 +16,13 @@ public static class CacheBustingExtension
         if (context.Request.Cookies.ContainsKey(cookieName) == true)
         {
             var hash = context.Request.Cookies[cookieName];
-            if (hash != abh.CompiledHashString)
+            if (hash != abh.CompiledHash)
             {
                 context.Response.Headers["Clear-Site-Data"] = "\"cache\"";
                 Log.Information($"clearing cache on client");
             }
         }
-        context.Response.Cookies.Append(cookieName, abh.CompiledHashString, new()
+        context.Response.Cookies.Append(cookieName, abh.CompiledHash, new()
         {
             Secure = true,
             Expires = DateTimeOffset.MaxValue
