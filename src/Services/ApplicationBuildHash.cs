@@ -20,12 +20,10 @@ public class ApplicationBuildHash
         Log.Information("generating app hash for {app}", Path.GetFileNameWithoutExtension(assembly.Location));
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => Path.GetDirectoryName(a.Location) == Path.GetDirectoryName(assembly.Location));
-        unchecked
-        {
-            var hash = $"{assemblies.Select(RetrieveLinkerHash).Sum():X}";
-            Log.Information("app hash for {app}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
-            return hash;
-        }
+
+        var hash = $"{assemblies.Select(RetrieveLinkerHash).Aggregate(0, (sum, i) => HashCode.Combine(sum, i)):X}";
+        Log.Information("app hash for {app}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
+        return hash;
     }
 
     private static int RetrieveLinkerHash(Assembly assembly)
