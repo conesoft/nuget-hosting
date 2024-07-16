@@ -17,11 +17,11 @@ public class ApplicationBuildHash
     private static string RetrieveLinkerHash()
     {
         var assembly = Assembly.GetEntryAssembly()!;
-        Log.Information("generating app hash for {app}", assembly.Location);
+        Log.Information("generating app hash for {app}", Path.GetFileNameWithoutExtension(assembly.Location));
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => Path.GetDirectoryName(a.Location) == Path.GetDirectoryName(assembly.Location));
         var hash = string.Join("", assemblies.Select(RetrieveLinkerHash));
-        Log.Information("app hash for {app}: {hash}", assembly.Location, hash);
+        Log.Information("app hash for {app}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
         return hash;
     }
 
@@ -33,7 +33,6 @@ public class ApplicationBuildHash
         FileStream? s = null;
         try
         {
-            Log.Information("generating assembly hash for {assembly}", assembly.Location);
             s = new FileStream(assembly.Location, FileMode.Open, FileAccess.Read);
             s.Read(b, 0, 2048);
         }
@@ -42,7 +41,7 @@ public class ApplicationBuildHash
             s?.Close();
         }
         var hash = $"{BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset):X}";
-        Log.Information("assembly hash for {assembly}: {hash}", assembly.Location, hash);
+        Log.Information("generating assembly hash for {assembly}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
         return hash;
     }
 }
