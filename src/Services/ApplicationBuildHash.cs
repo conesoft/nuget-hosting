@@ -20,12 +20,12 @@ public class ApplicationBuildHash
         Log.Information("generating app hash for {app}", Path.GetFileNameWithoutExtension(assembly.Location));
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => Path.GetDirectoryName(a.Location) == Path.GetDirectoryName(assembly.Location));
-        var hash = string.Join("", assemblies.Select(RetrieveLinkerHash));
+        var hash = $"{assemblies.Select(RetrieveLinkerHash).Sum():X}";
         Log.Information("app hash for {app}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
         return hash;
     }
 
-    private static string RetrieveLinkerHash(Assembly assembly)
+    private static int RetrieveLinkerHash(Assembly assembly)
     {
         const int peHeaderOffset = 60;
         const int linkerCompileHashOffset = 8;
@@ -40,8 +40,8 @@ public class ApplicationBuildHash
         {
             s?.Close();
         }
-        var hash = $"{BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset):X}";
-        Log.Information("generating assembly hash for {assembly}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), hash);
+        var hash = BitConverter.ToInt32(b, BitConverter.ToInt32(b, peHeaderOffset) + linkerCompileHashOffset);
+        Log.Information("generating assembly hash for {assembly}: {hash}", Path.GetFileNameWithoutExtension(assembly.Location), $"{hash:X}");
         return hash;
     }
 }
