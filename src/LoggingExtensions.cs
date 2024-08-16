@@ -1,7 +1,9 @@
 ﻿using Conesoft.Files;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 using Serilog.Formatting.Compact;
 using System;
 using System.Threading;
@@ -52,8 +54,24 @@ public static class LoggingExtensions
 
         services.AddHostedService<HostedLoggingExtension>();
 
+        services.AddSerilog();
+
+        AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
+        {
+            if(e.ExceptionObject is Exception ex)
+            {
+                Log.Fatal(ex, "Unhandled Exception");
+            }
+            else
+            {
+                Log.Fatal("Unhandled Exception: {ex}", e.ExceptionObject);
+            }
+        };
+
         return services;
     }
+
+    public static IApplicationBuilder UseLoggingToHost(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
 
     class HostedLoggingExtension() : IHostedService
     {
