@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conesoft.Hosting.Extensions;
+namespace Conesoft.Hosting;
 
 public static class LoggingExtensions
 {
