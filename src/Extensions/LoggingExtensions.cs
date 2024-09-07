@@ -1,26 +1,24 @@
 ﻿using Conesoft.Files;
+using Humanizer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using Serilog.Formatting.Compact;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Extensions;
 
 public static class LoggingExtensions
 {
-    private static string ToTitleCase(this string text) => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.ToLowerInvariant());
-
     public static HostedLoggingExtensionWrapper AddLogging(Directory logFilePath, string appName)
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
             .WriteTo.File(
-                (logFilePath / Filename.From($"{appName} - ", "txt")).Path,
+                (logFilePath / "as Text" / Filename.From($"{appName} - ", "txt")).Path,
                 buffered: false,
                 shared: true,
                 rollingInterval: RollingInterval.Day,
@@ -38,7 +36,7 @@ public static class LoggingExtensions
             )
             .CreateLogger();
 
-        Log.Information($"app '{appName.ToTitleCase()}' starting up...");
+        Log.Information($"app '{appName.Titleize()}' starting up...");
 
         return new(appName);
     }
@@ -47,7 +45,7 @@ public static class LoggingExtensions
     {
         var name = Host.HostingType == "Websites" ?
             $"{Host.HostingType} - {Host.FullDomain.ToLowerInvariant()}" :
-            $"{Host.HostingType} - {Host.Name.ToTitleCase()}";
+            $"{Host.HostingType} - {Host.Name.Titleize()}";
         var log = Host.Root / "Logs" / name;
 
         AddLogging(log, Host.Name);
@@ -56,9 +54,9 @@ public static class LoggingExtensions
 
         services.AddSerilog();
 
-        AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
+        AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
-            if(e.ExceptionObject is Exception ex)
+            if (e.ExceptionObject is Exception ex)
             {
                 Log.Fatal(ex, "Unhandled Exception");
             }
@@ -78,17 +76,17 @@ public static class LoggingExtensions
         private readonly string? appName = null;
         public HostedLoggingExtension(string appName) : this()
         {
-            this.appName = appName.ToTitleCase();
+            this.appName = appName.Titleize();
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Log.Information($"app '{appName ?? Host.Name.ToTitleCase()}' started");
+            Log.Information($"app '{appName ?? Host.Name.Titleize()}' started");
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            Log.Information($"app '{appName ?? Host.Name.ToTitleCase()}' stopped");
+            Log.Information($"app '{appName ?? Host.Name.Titleize()}' stopped");
             return Task.CompletedTask;
         }
     }

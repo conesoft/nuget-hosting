@@ -8,15 +8,18 @@ namespace Conesoft.Hosting.Services;
 
 public class GarbageCollect(TimeSpan period) : PeriodicTask(period)
 {
+    private readonly ILogger log = Log.ForContext<GarbageCollect>();
+
     protected override Task Process()
     {
         var memoryBefore = System.Diagnostics.Process.GetCurrentProcess().PrivateMemorySize64;
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
         var memoryAfter = System.Diagnostics.Process.GetCurrentProcess().PrivateMemorySize64;
-        Log.Information("running garbage collection cycle: {@releasedMemory} released, {@usedMemory} in use", new Bytes(Math.Max(0, memoryBefore - memoryAfter)), new Bytes(memoryAfter));
+        log.Information("running garbage collection cycle: {@releasedMemory} released, {@usedMemory} in use", new Bytes(Math.Max(0, memoryBefore - memoryAfter)), new Bytes(memoryAfter));
 
         return Task.CompletedTask;
     }
+
     record struct Bytes(long Value);
 }
 
