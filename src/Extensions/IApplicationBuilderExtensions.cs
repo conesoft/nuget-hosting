@@ -46,7 +46,8 @@ public static class IApplicationBuilderExtensions
         {
             if (context.Response.Headers.CacheControl.Count == 0)
             {
-                context.Response.Headers.CacheControl = "no-cache";
+                context.Response.Headers.Pragma = "no-cache";
+                context.Response.Headers.CacheControl = "no-cache, no-store";
             }
             await next.Invoke();
         });
