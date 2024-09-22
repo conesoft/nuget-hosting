@@ -41,6 +41,7 @@ public static class LoggingExtensions
         return new(appName);
     }
 
+
     public static IServiceCollection AddLoggingToHost(this IServiceCollection services)
     {
         var name = Host.HostingType == "Websites" ?
@@ -48,7 +49,12 @@ public static class LoggingExtensions
             $"{Host.HostingType} - {Host.Name.Titleize()}";
         var log = Host.Root / "Logs" / name;
 
-        AddLogging(log, Host.Name);
+        return services.AddLoggingToHost(log, name);
+    }
+
+    public static IServiceCollection AddLoggingToHost(this IServiceCollection services, Directory logFilePath, string appName)
+    {
+        AddLogging(logFilePath, appName);
 
         services.AddHostedService<HostedLoggingExtension>();
 
