@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-class ChangeBroadcaster()
+public class ChangeBroadcaster()
 {
     readonly HashSet<TaskCompletionSource> targets = [];
 

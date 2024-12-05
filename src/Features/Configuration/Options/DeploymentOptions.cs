@@ -1,6 +1,6 @@
 ﻿namespace Conesoft.Hosting;
 
-class DeploymentOptions()
+public class DeploymentOptions()
 {
     public string Domain { get; init; } = "";
 

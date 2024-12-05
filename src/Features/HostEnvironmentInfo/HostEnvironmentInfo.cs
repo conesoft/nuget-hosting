@@ -1,12 +1,11 @@
 using Conesoft.Files;
-using Conesoft.Hosting.Features.Configuration.Options;
 using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 
 namespace Conesoft.Hosting;
 
-class HostEnvironment
+public class HostEnvironment
 {
     public record Directories(Directory Deployments, Directory Live, Directory Storage);
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting.Helpers.Broadcasters;
 
-class StateBroadcaster<T>(T startingState = default!)
+public class StateBroadcaster<T>(T startingState = default!)
 {
     readonly HashSet<Channel<T>> targets = [];
     private T last = startingState;
@@ -34,7 +34,7 @@ class StateBroadcaster<T>(T startingState = default!)
 
 }
 
-static class StateBroadcaster
+public static class StateBroadcaster
 {
     public static StateBroadcaster<T> CreateWith<T>(T startingState) => new(startingState);
 }

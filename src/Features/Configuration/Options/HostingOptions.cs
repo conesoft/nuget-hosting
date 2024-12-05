@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Conesoft.Hosting.Features.Configuration.Options;
+namespace Conesoft.Hosting;
 
-class HostingOptions()
+public class HostingOptions()
 {
     [ConfigurationKeyName("root")]
     public string Root { get; init; } = "";

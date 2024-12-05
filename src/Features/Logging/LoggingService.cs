@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-class LoggingService : IHostedService
+public class LoggingService : IHostedService
 {
     private readonly HostEnvironment environment;
 

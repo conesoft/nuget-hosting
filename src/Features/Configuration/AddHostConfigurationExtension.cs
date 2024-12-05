@@ -1,6 +1,4 @@
 ﻿using Conesoft.Files;
-using Conesoft.Hosting.Features.Configuration;
-using Conesoft.Hosting.Features.Configuration.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +11,7 @@ using IO = System.IO;
 
 namespace Conesoft.Hosting;
 
-static class AddHostConfigurationExtension
+public static class AddHostConfigurationExtension
 {
     public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder)
     {
