@@ -64,11 +64,13 @@ public static class AddHostConfigurationExtension
 
     private static string FindAppName(ConfigurationManager _, File? deployFile)
     {
-        var appNameFromDeployFile = deployFile != null ? XDocument.Load(deployFile.Path).XPathSelectElement("//Name|//Domain")?.Value : null;
+        var appNameFromDeployFile = Safe.Try(() => XDocument.Load(deployFile!.Path).XPathSelectElement("//Name|//Domain")?.Value);
 
-        var appNameFromExecutingAssemblyPath = IO.Path.GetFileName(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+        var appNameFromExecutingAssemblyPath = Safe.Try(() => IO.Path.GetFileName(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
 
-        return appNameFromDeployFile ?? appNameFromExecutingAssemblyPath ?? throw new Exception("Could not find hosting:appname from Deploy.pubxml or Executing Assembly Location");
+        return appNameFromDeployFile
+            ?? appNameFromExecutingAssemblyPath
+            ?? throw new Exception("Could not find hosting:appname from Deploy.pubxml or Executing Assembly Location");
     }
 
     private static void AddAppNameToConfiguration(this ConfigurationManager configuration, string appName)
@@ -80,7 +82,7 @@ public static class AddHostConfigurationExtension
     {
         var rootFromConfiguration = configuration["hosting:root"];
 
-        var rootFromDeployHostingValue = deployFile switch
+        var rootFromDeployHostingValue = Safe.Try(() => deployFile switch
         {
             File => XDocument.Load(deployFile.Path).XPathSelectElement("//Hosting")?.Value switch
             {
@@ -88,11 +90,17 @@ public static class AddHostConfigurationExtension
                 _ => null
             },
             _ => null
-        };
+        });
 
-        var rootFromAssemblyParentPath = File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Path;
+        var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Path);
 
-        return rootFromConfiguration ?? rootFromDeployHostingValue ?? rootFromAssemblyParentPath ?? throw new Exception("Could not find hosting:root from appseettings.json, Deploy.pubxml or Executing Assembly Location");
+        var rootFromAssemblyParentPathLegacyBackup = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Path);
+
+        return rootFromConfiguration
+            ?? rootFromDeployHostingValue
+            ?? rootFromAssemblyParentPath
+            ?? rootFromAssemblyParentPathLegacyBackup
+            ?? throw new Exception("Could not find hosting:root from appseettings.json, Deploy.pubxml or Executing Assembly Location");
     }
 
     private static void AddRootToConfiguration(this ConfigurationManager configuration, string root)
