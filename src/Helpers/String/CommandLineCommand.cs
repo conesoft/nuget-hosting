@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Conesoft.Hosting.Helpers.String;
-
 public record CommandLineCommand(string Command, string[] Arguments)
 {
     public static IEnumerable<CommandLineCommand> Parse(string? commandLine = null)

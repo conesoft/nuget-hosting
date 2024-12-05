@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Conesoft.Hosting.Features.UsersWithStorage;
-
 public static class AddUsersWithStorageExtensions
 {
     [Obsolete("not supported anymore")]

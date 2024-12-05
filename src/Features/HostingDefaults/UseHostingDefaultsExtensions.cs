@@ -2,8 +2,6 @@
 using System;
 using System.Linq;
 
-namespace Conesoft.Hosting.Features.HostingDefaults;
-
 public static class UseHostingDefaultsExtensions
 {
     static readonly string[] contentTypes = ["text", "json", "xml"];

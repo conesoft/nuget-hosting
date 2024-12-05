@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Conesoft.Hosting.Features.CacheBusting;
-
 public class ApplicationBuildHash
 {
     private string? compiledHash;

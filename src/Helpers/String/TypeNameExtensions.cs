@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-namespace Conesoft.Hosting.Helpers.String;
-
 // from https://stackoverflow.com/a/59975770/1528847
 public static class TypeNameExtensions
 {
