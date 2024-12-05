@@ -1,6 +1,7 @@
 ﻿using Conesoft.Files;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
@@ -27,6 +28,15 @@ public static class AddHostConfigurationExtension
         builder.AddHostConfigurationFiles();
 
         builder.Services.ConfigureOptionsSection<OptionsType>(section);
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder) where OptionsType : class
+    {
+        builder.AddHostConfigurationFiles();
+
+        builder.Services.Configure<OptionsType>(builder.Configuration);
 
         return builder;
     }
