@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
+namespace Conesoft.Hosting;
+
 public static partial class AddLoggingServiceExtension
 {
     public static WebApplicationBuilder AddLoggingService(this WebApplicationBuilder builder)

@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
+namespace Conesoft.Hosting;
+
 public class StateBroadcaster<T>(T startingState = default!)
 {
     readonly HashSet<Channel<T>> targets = [];

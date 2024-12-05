@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+namespace Conesoft.Hosting;
+
 public class ChangeBroadcaster()
 {
     readonly HashSet<TaskCompletionSource> targets = [];

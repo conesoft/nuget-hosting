@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+namespace Conesoft.Hosting;
+
 public class ApplicationBuildHash
 {
     private string? compiledHash;

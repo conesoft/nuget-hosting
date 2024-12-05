@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+namespace Conesoft.Hosting;
+
 public class HostingOptions()
 {
     [ConfigurationKeyName("root")]

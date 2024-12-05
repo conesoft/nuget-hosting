@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 
+namespace Conesoft.Hosting;
+
 public static class AddCompiledHashCacheBusterExtension
 {
     public static IServiceCollection AddCompiledHashCacheBuster(this IServiceCollection services) => services.AddSingleton<ApplicationBuildHash>();

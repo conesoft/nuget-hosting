@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 
+namespace Conesoft.Hosting;
+
 public class HostEnvironment
 {
     public record Directories(Directory Deployments, Directory Live, Directory Storage);

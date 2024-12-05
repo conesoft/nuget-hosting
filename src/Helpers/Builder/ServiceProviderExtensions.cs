@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using System;
 
+namespace Conesoft.Hosting;
+
 public static class ResolverExtension
 {
     // Just a helper method to shorten code registration code

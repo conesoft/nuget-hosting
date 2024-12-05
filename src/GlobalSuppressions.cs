@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Design", "CA1050", Justification = "Keep everything in the Root Namespace")]
+[assembly: SuppressMessage("Style", "IDE0130", Justification = "Keep everything in the Root Namespace")]

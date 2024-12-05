@@ -9,6 +9,8 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using IO = System.IO;
 
+namespace Conesoft.Hosting;
+
 public static class AddHostConfigurationExtension
 {
     public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder)

@@ -6,6 +6,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+namespace Conesoft.Hosting;
+
 public class LoggingService : IHostedService
 {
     private readonly HostEnvironment environment;

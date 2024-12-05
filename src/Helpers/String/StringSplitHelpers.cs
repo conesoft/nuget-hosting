@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+namespace Conesoft.Hosting;
+
 public static class StringSplitHelpers
 {
     public static string[] SplitExceptQuotes(this string input, string splitter)

@@ -3,6 +3,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+namespace Conesoft.Hosting;
+
 public abstract class PeriodicTask(TimeSpan period) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

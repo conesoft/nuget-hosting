@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
+namespace Conesoft.Hosting;
+
 public static class ConfigureOptionsSectionExtensions
 {
     public static IServiceCollection ConfigureOptionsSection<T>(this IServiceCollection services, string section) where T : class
