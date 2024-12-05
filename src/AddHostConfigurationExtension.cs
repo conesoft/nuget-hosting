@@ -8,65 +8,75 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using IO = System.IO;
 
 namespace Conesoft.Hosting;
 
 public static class AddHostConfigurationExtension
 {
-    public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder, bool legacyMode)
     {
-        builder.Configuration.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment());
+        builder.Configuration.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
 
         builder.Services.ConfigureOptionsSection<HostingOptions>(section: "hosting");
 
         return builder;
     }
 
-    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder, string section) where OptionsType : class
+    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder, string section, bool legacyMode) where OptionsType : class
     {
-        builder.AddHostConfigurationFiles();
+        builder.AddHostConfigurationFiles(legacyMode);
 
         builder.Services.ConfigureOptionsSection<OptionsType>(section);
 
         return builder;
     }
 
-    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder) where OptionsType : class
+    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder, bool legacyMode) where OptionsType : class
     {
-        builder.AddHostConfigurationFiles();
+        builder.AddHostConfigurationFiles(legacyMode);
 
         builder.Services.Configure<OptionsType>(builder.Configuration);
 
         return builder;
     }
 
-    private static ConfigurationManager AddHostConfigurationToConfiguration(this ConfigurationManager configuration, bool developmentMode)
+    private static ConfigurationManager AddHostConfigurationToConfiguration(this ConfigurationManager configuration, bool developmentMode, bool legacyMode)
     {
         var deployFile = Directory.Common.Current.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault();
 
-        var appName = FindAppName(configuration, deployFile);
-        var root = FindRoot(configuration, deployFile);
+        var appName = FindAppName(configuration, deployFile, legacyMode);
+        var root = FindRoot(configuration, deployFile, legacyMode);
 
         configuration.AddAppNameToConfiguration(appName);
         configuration.AddRootToConfiguration(root);
 
-        configuration.AddJsonFile(IO.Path.Combine(root, "Settings", "settings.json"));
-        configuration.AddJsonFile(IO.Path.Combine(root, "Settings", appName + ".json"), optional: true, reloadOnChange: true);
+        var settingsRoot = Directory.From(root) / "Settings";
+        configuration.AddJsonFile((settingsRoot / Filename.From("settings", "json")).Path);
+        configuration.AddJsonFile((settingsRoot / Filename.From(appName, "json")).Path, optional: true, reloadOnChange: true);
 
         if (developmentMode == false)
         {
-            configuration.AddJsonFile(IO.Path.Combine(root, "Settings", "hosting.json"));
+            configuration.AddJsonFile((settingsRoot / Filename.From("hosting", "json")).Path);
         }
 
         return configuration;
     }
 
-    private static string FindAppName(ConfigurationManager _, File? deployFile)
+    private static string FindAppName(ConfigurationManager _, File? deployFile, bool legacyMode)
     {
         var appNameFromDeployFile = Safe.Try(() => XDocument.Load(deployFile!.Path).XPathSelectElement("//Name|//Domain")?.Value);
 
-        var appNameFromExecutingAssemblyPath = Safe.Try(() => IO.Path.GetFileName(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+        var appNameFromExecutingAssemblyPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Name);
+
+        if (legacyMode)
+        {
+            appNameFromExecutingAssemblyPath = Safe.Try(() =>
+            {
+                var file = File.From(Assembly.GetExecutingAssembly().Location);
+
+                return file.Parent.Name + "." + file.Parent.Parent.Name;
+            });
+        }
 
         return appNameFromDeployFile
             ?? appNameFromExecutingAssemblyPath
@@ -78,7 +88,7 @@ public static class AddHostConfigurationExtension
         configuration.AddInMemoryCollection([new("hosting:appname", appName)]);
     }
 
-    private static string FindRoot(ConfigurationManager configuration, File? deployFile)
+    private static string FindRoot(ConfigurationManager configuration, File? deployFile, bool legacyMode)
     {
         var rootFromConfiguration = configuration["hosting:root"];
 
@@ -94,14 +104,14 @@ public static class AddHostConfigurationExtension
 
         var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Path);
 
-        /* legacy support, temporary */
-        rootFromAssemblyParentPath = Safe.Try(() => Directory.From(rootFromAssemblyParentPath!).Name == "Hosting" ? rootFromAssemblyParentPath : null);
-        var rootFromAssemblyParentPathLegacyBackup = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Parent.Path);
+        if (legacyMode)
+        {
+            rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Parent.Path);
+        }
 
         return rootFromConfiguration
             ?? rootFromDeployHostingValue
             ?? rootFromAssemblyParentPath
-            ?? rootFromAssemblyParentPathLegacyBackup
             ?? throw new Exception("Could not find hosting:root from appseettings.json, Deploy.pubxml or Executing Assembly Location");
     }
 
