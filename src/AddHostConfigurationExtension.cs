@@ -94,6 +94,8 @@ public static class AddHostConfigurationExtension
 
         var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Path);
 
+        /* legacy support, temporary */
+        rootFromAssemblyParentPath = Safe.Try(() => Directory.From(rootFromAssemblyParentPath!).Name == "Hosting" ? rootFromAssemblyParentPath : null);
         var rootFromAssemblyParentPathLegacyBackup = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Path);
 
         return rootFromConfiguration
