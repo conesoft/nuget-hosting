@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Helpers.Periodic;
 
 public abstract class PeriodicCache<T>(TimeSpan period) : PeriodicTask(period) where T : class
 {

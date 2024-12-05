@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.HostEnvironmentInfo;
 
 public static class AddHostEnvironmentInfoExtension
 {

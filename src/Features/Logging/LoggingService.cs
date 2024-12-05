@@ -1,4 +1,5 @@
 ﻿using Conesoft.Files;
+using Conesoft.Hosting.Features.HostEnvironmentInfo;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Formatting.Compact;
@@ -6,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.Logging;
 
 public class LoggingService : IHostedService
 {

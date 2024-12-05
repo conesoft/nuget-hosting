@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.CacheBusting;
 
 public class ApplicationBuildHash
 {

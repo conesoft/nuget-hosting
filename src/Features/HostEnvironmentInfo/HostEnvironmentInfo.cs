@@ -1,9 +1,10 @@
 using Conesoft.Files;
+using Conesoft.Hosting.Features.Configuration.Options;
 using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.HostEnvironmentInfo;
 
 public class HostEnvironment
 {

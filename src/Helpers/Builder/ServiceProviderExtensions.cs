@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Helpers.Builder;
 
 public static class ResolverExtension
 {

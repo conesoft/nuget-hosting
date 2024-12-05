@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.Configuration;
 
 public static class ConfigureOptionsSectionExtensions
 {

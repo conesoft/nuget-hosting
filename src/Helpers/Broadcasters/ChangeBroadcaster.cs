@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Helpers.Broadcasters;
 
 public class ChangeBroadcaster()
 {

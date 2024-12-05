@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.Configuration.Options;
 
 public class HostingOptions()
 {

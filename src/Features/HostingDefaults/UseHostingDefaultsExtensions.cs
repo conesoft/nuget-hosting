@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Features.HostingDefaults;
 
 public static class UseHostingDefaultsExtensions
 {

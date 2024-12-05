@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Helpers.String;
 
 public record CommandLineCommand(string Command, string[] Arguments)
 {

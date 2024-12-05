@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Conesoft.Hosting;
+namespace Conesoft.Hosting.Helpers.String;
 
 public static class StringSplitHelpers
 {

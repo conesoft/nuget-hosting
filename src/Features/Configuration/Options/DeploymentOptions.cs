@@ -1,4 +1,4 @@
-﻿namespace Conesoft.Hosting;
+﻿namespace Conesoft.Hosting.Features.Configuration.Options;
 
 public class DeploymentOptions()
 {
