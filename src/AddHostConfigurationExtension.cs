@@ -15,7 +15,7 @@ public static class AddHostConfigurationExtension
 {
     public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder, bool legacyMode)
     {
-        builder.Configuration.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
+        builder.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
 
         builder.Services.ConfigureOptionsSection<HostingOptions>(section: "hosting");
 
@@ -40,9 +40,10 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    private static ConfigurationManager AddHostConfigurationToConfiguration(this ConfigurationManager configuration, bool developmentMode, bool legacyMode)
+    private static WebApplicationBuilder AddHostConfigurationToConfiguration(this WebApplicationBuilder builder, bool developmentMode, bool legacyMode)
     {
         var deployFile = Directory.Common.Current.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault();
+        var configuration = builder.Configuration;
 
         var appName = FindAppName(configuration, deployFile, legacyMode);
         var root = FindRoot(configuration, deployFile, legacyMode);
@@ -54,12 +55,14 @@ public static class AddHostConfigurationExtension
         configuration.AddJsonFile((settingsRoot / Filename.From("settings", "json")).Path);
         configuration.AddJsonFile((settingsRoot / Filename.From(appName, "json")).Path, optional: true, reloadOnChange: true);
 
+        builder.Services.AddSingleton(new LocalSettings(settingsRoot / Filename.From(appName, "json")));
+
         if (developmentMode == false)
         {
             configuration.AddJsonFile((settingsRoot / Filename.From("hosting", "json")).Path);
         }
 
-        return configuration;
+        return builder;
     }
 
     private static string FindAppName(ConfigurationManager _, File? deployFile, bool legacyMode)
