@@ -9,24 +9,27 @@ public static class AddCompiledHashCacheBusterExtension
 {
     public static IServiceCollection AddCompiledHashCacheBuster(this IServiceCollection services) => services.AddSingleton<ApplicationBuildHash>();
 
-    public static IApplicationBuilder UseCompiledHashCacheBuster(this IApplicationBuilder app, string cookieName = "Conesoft.ApplicationHash") => app.Use(async (context, next) =>
+    public static IApplicationBuilder UseCompiledHashCacheBuster(this IApplicationBuilder app, string cookieName = "Conesoft.ApplicationHash")
     {
-        var abh = (context.RequestServices.GetService(typeof(ApplicationBuildHash)) as ApplicationBuildHash)!;
-        if (context.Request.Cookies.ContainsKey(cookieName) == true)
+        return app.Use(async (context, next) =>
         {
-            var hash = context.Request.Cookies[cookieName];
-            if (hash != abh.CompiledHash)
+            var abh = context.RequestServices.GetRequiredService<ApplicationBuildHash>();
+            if (context.Request.Cookies.ContainsKey(cookieName) == true)
             {
-                context.Response.Headers["Clear-Site-Data"] = "\"cache\"";
-                Log.Information($"clearing cache on client");
+                var hash = context.Request.Cookies[cookieName];
+                if (hash != abh.CompiledHash)
+                {
+                    context.Response.Headers["Clear-Site-Data"] = "\"cache\"";
+                    Log.Information($"clearing cache on client");
+                }
             }
-        }
-        context.Response.Cookies.Append(cookieName, abh.CompiledHash, new()
-        {
-            Secure = true,
-            Expires = DateTimeOffset.MaxValue
+            context.Response.Cookies.Append(cookieName, abh.CompiledHash, new()
+            {
+                Secure = true,
+                Expires = DateTimeOffset.MaxValue
 
+            });
+            await next();
         });
-        await next();
-    });
+    }
 }

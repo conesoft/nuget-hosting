@@ -92,15 +92,7 @@ public static class AddHostConfigurationExtension
     {
         var rootFromConfiguration = configuration["hosting:root"];
 
-        var rootFromDeployHostingValue = Safe.Try(() => deployFile switch
-        {
-            File => XDocument.Load(deployFile.Path).XPathSelectElement("//Hosting")?.Value switch
-            {
-                string path => Directory.From(path).Parent.Parent.Path,
-                _ => null
-            },
-            _ => null
-        });
+        var rootFromDeployHostingValue = Safe.Try(() => Directory.From(XDocument.Load(deployFile!.Path).XPathSelectElement("//Hosting")!.Value).Parent.Parent.Path);
 
         var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Path);
 
