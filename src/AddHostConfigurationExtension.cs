@@ -21,24 +21,12 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    public static Builder AddHostConfigurationFiles<Builder, OptionsType>(this Builder builder, string section, bool legacyMode)
+    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder, bool legacyMode, Action<Configurator> configureTypes)
         where Builder : IHostApplicationBuilder
-        where OptionsType : class
     {
         builder.AddHostConfigurationFiles(legacyMode);
 
-        builder.Services.ConfigureOptionsSection<OptionsType>(section);
-
-        return builder;
-    }
-
-    public static Builder AddHostConfigurationFiles<Builder, OptionsType>(this Builder builder, bool legacyMode)
-        where Builder : IHostApplicationBuilder
-        where OptionsType : class
-    {
-        builder.AddHostConfigurationFiles(legacyMode);
-
-        builder.Services.Configure<OptionsType>(builder.Configuration);
+        configureTypes(new(builder.Services, builder.Configuration));
 
         return builder;
     }
