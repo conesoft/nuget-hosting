@@ -103,7 +103,14 @@ public static class AddHostConfigurationExtension
 
         if (legacyMode)
         {
-            rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Parent.Path);
+            if (Assembly.GetExecutingAssembly().FullName?.Contains("Website") ?? false)
+            {
+                rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Parent.Path);
+            }
+            else
+            {
+                rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.Parent.Path);
+            }
         }
 
         return rootFromConfiguration
