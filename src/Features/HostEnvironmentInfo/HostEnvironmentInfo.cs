@@ -26,7 +26,7 @@ public class HostEnvironment
 
         var root = Directory.From(hostingOptions.Value.Root);
 
-        var isInHostedEnvironment = Assembly.GetExecutingAssembly().Location.StartsWith(
+        var isInHostedEnvironment = Assembly.GetEntryAssembly().Location.StartsWith(
             System.IO.Path.TrimEndingDirectorySeparator(root.Path) + System.IO.Path.DirectorySeparatorChar,
             StringComparison.OrdinalIgnoreCase
         );
