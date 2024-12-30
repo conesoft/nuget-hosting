@@ -72,12 +72,15 @@ public static class AddHostConfigurationExtension
 
         if (legacyMode)
         {
-            appNameFromExecutingAssemblyPath = Safe.Try(() =>
+            if(Assembly.GetExecutingAssembly().FullName?.Contains("Website") ?? false)
             {
-                var file = File.From(Assembly.GetExecutingAssembly().Location);
+                appNameFromExecutingAssemblyPath = Safe.Try(() =>
+                {
+                    var file = File.From(Assembly.GetExecutingAssembly().Location);
 
-                return file.Parent.Name + "." + file.Parent.Parent.Name;
-            });
+                    return file.Parent.Name + "." + file.Parent.Parent.Name;
+                });
+            }
         }
 
         return appNameFromDeployFile
