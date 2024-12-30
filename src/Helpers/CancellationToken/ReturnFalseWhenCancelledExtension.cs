@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-static class ReturnFalseWhenCancelledExtension
+public static class ReturnFalseWhenCancelledExtension
 {
     public static async Task<bool> ReturnFalseWhenCancelled(this ValueTask<bool> task)
     {

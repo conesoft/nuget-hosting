@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-static class StartConsoleExtension
+public static class StartConsoleExtension
 {
     public static async Task<LifetimeWrapper> StartConsoleAsync(this IHost host)
     {
