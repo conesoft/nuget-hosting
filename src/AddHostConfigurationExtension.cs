@@ -1,5 +1,4 @@
 ﻿using Conesoft.Files;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +12,7 @@ namespace Conesoft.Hosting;
 
 public static class AddHostConfigurationExtension
 {
-    public static WebApplicationBuilder AddHostConfigurationFiles(this WebApplicationBuilder builder, bool legacyMode)
+    public static IHostApplicationBuilder AddHostConfigurationFiles(this IHostApplicationBuilder builder, bool legacyMode)
     {
         builder.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
 
@@ -22,7 +21,7 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder, string section, bool legacyMode) where OptionsType : class
+    public static IHostApplicationBuilder AddHostConfigurationFiles<OptionsType>(this IHostApplicationBuilder builder, string section, bool legacyMode) where OptionsType : class
     {
         builder.AddHostConfigurationFiles(legacyMode);
 
@@ -31,7 +30,7 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    public static WebApplicationBuilder AddHostConfigurationFiles<OptionsType>(this WebApplicationBuilder builder, bool legacyMode) where OptionsType : class
+    public static IHostApplicationBuilder AddHostConfigurationFiles<OptionsType>(this IHostApplicationBuilder builder, bool legacyMode) where OptionsType : class
     {
         builder.AddHostConfigurationFiles(legacyMode);
 
@@ -40,7 +39,7 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    private static WebApplicationBuilder AddHostConfigurationToConfiguration(this WebApplicationBuilder builder, bool developmentMode, bool legacyMode)
+    private static IHostApplicationBuilder AddHostConfigurationToConfiguration(this IHostApplicationBuilder builder, bool developmentMode, bool legacyMode)
     {
         var deployFile = Directory.Common.Current.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault();
         var configuration = builder.Configuration;
@@ -65,7 +64,7 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    private static string FindAppName(ConfigurationManager _, File? deployFile, bool legacyMode)
+    private static string FindAppName(IConfigurationManager _, File? deployFile, bool legacyMode)
     {
         var appNameFromDeployFile = Safe.Try(() => XDocument.Load(deployFile!.Path).XPathSelectElement("//Name|//Domain")?.Value);
 
@@ -86,12 +85,12 @@ public static class AddHostConfigurationExtension
             ?? throw new Exception("Could not find hosting:appname from Deploy.pubxml or Executing Assembly Location");
     }
 
-    private static void AddAppNameToConfiguration(this ConfigurationManager configuration, string appName)
+    private static void AddAppNameToConfiguration(this IConfigurationManager configuration, string appName)
     {
         configuration.AddInMemoryCollection([new("hosting:appname", appName)]);
     }
 
-    private static string FindRoot(ConfigurationManager configuration, File? deployFile, bool legacyMode)
+    private static string FindRoot(IConfigurationManager configuration, File? deployFile, bool legacyMode)
     {
         var rootFromConfiguration = configuration["hosting:root"];
 
@@ -110,7 +109,7 @@ public static class AddHostConfigurationExtension
             ?? throw new Exception("Could not find hosting:root from appseettings.json, Deploy.pubxml or Executing Assembly Location");
     }
 
-    private static void AddRootToConfiguration(this ConfigurationManager configuration, string root)
+    private static void AddRootToConfiguration(this IConfigurationManager configuration, string root)
     {
         configuration.AddInMemoryCollection([new("hosting:root", root)]);
     }

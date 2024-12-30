@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Conesoft.Hosting;
 
 public static class AddHostEnvironmentInfoExtension
 {
-    public static WebApplicationBuilder AddHostEnvironmentInfo(this WebApplicationBuilder builder)
+    public static IHostApplicationBuilder AddHostEnvironmentInfo(this IHostApplicationBuilder builder)
     {
         builder.Services.AddSingleton<HostEnvironment>();
         return builder;

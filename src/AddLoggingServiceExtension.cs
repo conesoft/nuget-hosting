@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace Conesoft.Hosting;
 
 public static partial class AddLoggingServiceExtension
 {
-    public static WebApplicationBuilder AddLoggingService(this WebApplicationBuilder builder)
+    public static IHostApplicationBuilder AddLoggingService(this IHostApplicationBuilder builder)
     {
         AttachConsole(-1);
         builder.Services.AddSingleton<LoggingService>();
