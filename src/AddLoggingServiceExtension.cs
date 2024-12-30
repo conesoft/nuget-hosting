@@ -7,7 +7,7 @@ namespace Conesoft.Hosting;
 
 public static partial class AddLoggingServiceExtension
 {
-    public static IHostApplicationBuilder AddLoggingService(this IHostApplicationBuilder builder)
+    public static Builder AddLoggingService<Builder>(this Builder builder) where Builder : IHostApplicationBuilder
     {
         AttachConsole(-1);
         builder.Services.AddSingleton<LoggingService>();

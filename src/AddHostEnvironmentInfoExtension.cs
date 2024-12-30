@@ -5,7 +5,7 @@ namespace Conesoft.Hosting;
 
 public static class AddHostEnvironmentInfoExtension
 {
-    public static IHostApplicationBuilder AddHostEnvironmentInfo(this IHostApplicationBuilder builder)
+    public static Builder AddHostEnvironmentInfo<Builder>(this Builder builder) where Builder : IHostApplicationBuilder
     {
         builder.Services.AddSingleton<HostEnvironment>();
         return builder;

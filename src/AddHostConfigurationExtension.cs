@@ -12,7 +12,7 @@ namespace Conesoft.Hosting;
 
 public static class AddHostConfigurationExtension
 {
-    public static IHostApplicationBuilder AddHostConfigurationFiles(this IHostApplicationBuilder builder, bool legacyMode)
+    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder, bool legacyMode) where Builder : IHostApplicationBuilder
     {
         builder.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
 
@@ -21,7 +21,9 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    public static IHostApplicationBuilder AddHostConfigurationFiles<OptionsType>(this IHostApplicationBuilder builder, string section, bool legacyMode) where OptionsType : class
+    public static Builder AddHostConfigurationFiles<Builder, OptionsType>(this Builder builder, string section, bool legacyMode)
+        where Builder : IHostApplicationBuilder
+        where OptionsType : class
     {
         builder.AddHostConfigurationFiles(legacyMode);
 
@@ -30,7 +32,9 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    public static IHostApplicationBuilder AddHostConfigurationFiles<OptionsType>(this IHostApplicationBuilder builder, bool legacyMode) where OptionsType : class
+    public static Builder AddHostConfigurationFiles<Builder, OptionsType>(this Builder builder, bool legacyMode)
+        where Builder : IHostApplicationBuilder
+        where OptionsType : class
     {
         builder.AddHostConfigurationFiles(legacyMode);
 
@@ -39,7 +43,8 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    private static IHostApplicationBuilder AddHostConfigurationToConfiguration(this IHostApplicationBuilder builder, bool developmentMode, bool legacyMode)
+    private static Builder AddHostConfigurationToConfiguration<Builder>(this Builder builder, bool developmentMode, bool legacyMode)
+        where Builder : IHostApplicationBuilder
     {
         var deployFile = Directory.Common.Current.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault();
         var configuration = builder.Configuration;
