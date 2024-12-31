@@ -92,7 +92,7 @@ public static class AddHostConfigurationExtension
 
         var rootFromDeployHostingValue = Safe.Try(() => Directory.From(XDocument.Load(deployFile!.Path).XPathSelectElement("//Hosting")!.Value).Parent.Parent.Path);
 
-        var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Parent.Parent.Path);
+        var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Parent.Parent.Parent.Path);
 
         if (legacyMode)
         {
