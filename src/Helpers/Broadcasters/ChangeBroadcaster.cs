@@ -15,11 +15,11 @@ public class ChangeBroadcaster()
         }
     }
 
-    public async Task WaitForChange()
+    public async Task WaitForChange(CancellationToken cancellationToken = default)
     {
         var target = new TaskCompletionSource();
         targets.Add(target);
-        await target.Task;
+        await target.Task.WaitAsync(cancellationToken);
         targets.Remove(target);
     }
 }
