@@ -16,4 +16,16 @@ public static class ReturnFalseWhenCancelledExtension
             return false;
         }
     }
+
+    public static async Task<bool> ReturnFalseWhenCancelled(this Task<bool> task)
+    {
+        try
+        {
+            return await task;
+        }
+        catch (OperationCanceledException)
+        {
+            return false;
+        }
+    }
 }
