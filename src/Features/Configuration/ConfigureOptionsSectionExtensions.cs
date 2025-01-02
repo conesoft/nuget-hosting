@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.ComponentModel;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class ConfigureOptionsSectionExtensions
 {
     public static IServiceCollection ConfigureOptionsSection<T>(this IServiceCollection services, string section) where T : class

@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class StartConsoleExtension
 {
     public static async Task<LifetimeWrapper> StartConsoleAsync(this IHost host)

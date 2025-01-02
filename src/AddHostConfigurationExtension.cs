@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -10,6 +11,8 @@ using System.Xml.XPath;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class AddHostConfigurationExtension
 {
     public static Builder AddHostConfigurationFiles<Builder>(this Builder builder) where Builder : IHostApplicationBuilder

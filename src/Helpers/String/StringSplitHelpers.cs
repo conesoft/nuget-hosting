@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringSplitHelpers
 {
     public static string[] SplitExceptQuotes(this string input, string splitter)

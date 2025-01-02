@@ -2,9 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.ComponentModel;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static partial class AddLoggingServiceExtension
 {
     public static Builder AddLoggingService<Builder>(this Builder builder) where Builder : IHostApplicationBuilder

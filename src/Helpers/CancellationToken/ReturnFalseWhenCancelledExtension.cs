@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class ReturnFalseWhenCancelledExtension
 {
     public static async Task<bool> ReturnFalseWhenCancelled(this ValueTask<bool> task)

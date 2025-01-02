@@ -2,9 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using System.ComponentModel;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class AddCompiledHashCacheBusterExtension
 {
     public static IServiceCollection AddCompiledHashCacheBuster(this IServiceCollection services) => services.AddSingleton<ApplicationBuildHash>();

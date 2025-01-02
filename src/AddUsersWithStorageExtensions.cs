@@ -1,8 +1,11 @@
 ﻿using Conesoft.Users;
 using Microsoft.AspNetCore.Builder;
+using System.ComponentModel;
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class AddUsersWithStorageExtensions
 {
     public static WebApplicationBuilder AddUsersWithStorage(this WebApplicationBuilder builder)

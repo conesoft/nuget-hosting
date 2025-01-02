@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 
 // from https://stackoverflow.com/a/59975770/1528847
 
 namespace Conesoft.Hosting;
 
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public static class TypeNameExtensions
 {
     public static string GetFriendlyName(this Type type, bool aliasNullable = true, bool includeSpaceAfterComma = true)
