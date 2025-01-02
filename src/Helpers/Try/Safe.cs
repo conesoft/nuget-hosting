@@ -15,4 +15,15 @@ public static class Safe
             return default;
         }
     }
+
+    public static void Try(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception)
+        {
+        }
+    }
 }

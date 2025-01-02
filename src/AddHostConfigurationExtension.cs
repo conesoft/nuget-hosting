@@ -12,33 +12,33 @@ namespace Conesoft.Hosting;
 
 public static class AddHostConfigurationExtension
 {
-    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder, bool legacyMode) where Builder : IHostApplicationBuilder
+    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder) where Builder : IHostApplicationBuilder
     {
-        builder.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment(), legacyMode);
+        builder.AddHostConfigurationToConfiguration(developmentMode: builder.Environment.IsDevelopment());
 
         builder.Services.ConfigureOptionsSection<HostingOptions>(section: "hosting");
 
         return builder;
     }
 
-    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder, bool legacyMode, Action<Configurator> configureTypes)
+    public static Builder AddHostConfigurationFiles<Builder>(this Builder builder, Action<Configurator> configureTypes)
         where Builder : IHostApplicationBuilder
     {
-        builder.AddHostConfigurationFiles(legacyMode);
+        builder.AddHostConfigurationFiles();
 
         configureTypes(new(builder.Services, builder.Configuration));
 
         return builder;
     }
 
-    private static Builder AddHostConfigurationToConfiguration<Builder>(this Builder builder, bool developmentMode, bool legacyMode)
+    private static Builder AddHostConfigurationToConfiguration<Builder>(this Builder builder, bool developmentMode)
         where Builder : IHostApplicationBuilder
     {
         var deployFile = Directory.Common.Current.FilteredFiles("Deploy.pubxml", allDirectories: true).FirstOrDefault();
         var configuration = builder.Configuration;
 
-        var appName = FindAppName(configuration, deployFile, legacyMode);
-        var root = FindRoot(configuration, deployFile, legacyMode);
+        var appName = FindAppName(configuration, deployFile);
+        var root = FindRoot(configuration, deployFile);
 
         configuration.AddAppNameToConfiguration(appName);
         configuration.AddRootToConfiguration(root);
@@ -57,24 +57,11 @@ public static class AddHostConfigurationExtension
         return builder;
     }
 
-    private static string FindAppName(IConfigurationManager _, File? deployFile, bool legacyMode)
+    private static string FindAppName(IConfigurationManager _, File? deployFile)
     {
         var appNameFromDeployFile = Safe.Try(() => XDocument.Load(deployFile!.Path).XPathSelectElement("//Name|//Domain")?.Value);
 
         var appNameFromEntryAssemblyPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Name);
-
-        if (legacyMode)
-        {
-            if(Safe.Try(() => Assembly.GetEntryAssembly()!.FullName!.Contains("Website")))
-            {
-                appNameFromEntryAssemblyPath = Safe.Try(() =>
-                {
-                    var file = File.From(Assembly.GetEntryAssembly()!.Location);
-
-                    return file.Parent.Name + "." + file.Parent.Parent.Name;
-                });
-            }
-        }
 
         return appNameFromDeployFile
             ?? appNameFromEntryAssemblyPath
@@ -86,25 +73,13 @@ public static class AddHostConfigurationExtension
         configuration.AddInMemoryCollection([new("hosting:appname", appName)]);
     }
 
-    private static string FindRoot(IConfigurationManager configuration, File? deployFile, bool legacyMode)
+    private static string FindRoot(IConfigurationManager configuration, File? deployFile)
     {
         var rootFromConfiguration = configuration["hosting:root"];
 
         var rootFromDeployHostingValue = Safe.Try(() => Directory.From(XDocument.Load(deployFile!.Path).XPathSelectElement("//Hosting")!.Value).Parent.Parent.Path);
 
         var rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Parent.Parent.Parent.Path);
-
-        if (legacyMode)
-        {
-            if (Safe.Try(() => Assembly.GetEntryAssembly()!.FullName!.Contains("Website")))
-            {
-                rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Parent.Parent.Parent.Parent.Path);
-            }
-            else
-            {
-                rootFromAssemblyParentPath = Safe.Try(() => File.From(Assembly.GetEntryAssembly()!.Location).Parent.Parent.Parent.Parent.Path);
-            }
-        }
 
         return rootFromConfiguration
             ?? rootFromDeployHostingValue
