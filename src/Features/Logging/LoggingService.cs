@@ -21,7 +21,6 @@ public class LoggingService : IHostedService
             var log = environment.Root / "Logs" / Filename.From($"{environment.ApplicationName} - ", "log");
 
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
                 .WriteTo.File(
                     txt.Path,
                     buffered: false,
