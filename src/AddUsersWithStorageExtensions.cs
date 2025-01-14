@@ -18,5 +18,5 @@ public static class AddUsersWithStorageExtensions
         return builder;
     }
 
-    public static void MapUsersWithStorage(this WebApplication app) => app.MapUsers();
+    public static WebApplication MapUsersWithStorage(this WebApplication app) => app.MapUsers();
 }
