@@ -30,7 +30,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Conesoft.Files" Version="4.0.1" />
+    <PackageReference Include="Conesoft.Files" Version="4.0.2" />
     <PackageReference Include="Conesoft.Notifications" Version="1.0.1" />
     <PackageReference Include="Conesoft.PwaGenerator" Version="1.0.1" />
     <PackageReference Include="Conesoft.Users" Version="3.1.3" />
