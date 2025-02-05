@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>3.4.10</Version>
+    <Version>3.4.11</Version>
     <Authors>davepermen</Authors>
     <Company>Conesoft</Company>
     <PackageIcon>Conesoft.forNuget.x256.png</PackageIcon>
@@ -30,7 +30,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Conesoft.Files" Version="4.0.3" />
+    <PackageReference Include="Conesoft.Files" Version="4.0.5" />
     <PackageReference Include="Conesoft.Notifications" Version="1.0.2" />
     <PackageReference Include="Conesoft.PwaGenerator" Version="1.0.1" />
     <PackageReference Include="Conesoft.Users" Version="3.1.4" />
