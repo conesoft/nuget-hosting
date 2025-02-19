@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-public abstract class BackgroundEntryWatcher() : IHostedService
+public abstract class BackgroundEntryWatcher<T>() : IHostedService where T : Entry
 {
     readonly CancellationTokenSource cts = new();
 
-    protected abstract Task<Entry> GetEntry();
+    protected abstract Task<T> GetEntry();
     protected virtual bool AllDirectories { get; } = false;
 
-    public abstract Task OnChange();
+    public abstract Task OnChange(T entry);
 
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
         var entry = await GetEntry();
-        entry.Live(OnChange, AllDirectories, cts);
+        entry.Live(() => OnChange(entry), AllDirectories, cts);
     }
 
     Task IHostedService.StopAsync(CancellationToken cancellationToken)

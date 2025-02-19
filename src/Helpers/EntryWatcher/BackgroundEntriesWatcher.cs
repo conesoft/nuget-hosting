@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Hosting;
 
-public abstract class BackgroundEntiesWatcher() : IHostedService
+public abstract class BackgroundEntiesWatcher<T>() : IHostedService where T : Entry
 {
     readonly CancellationTokenSource cts = new();
 
-    protected abstract Task<IEnumerable<Entry>> GetEntries();
+    protected abstract Task<IEnumerable<T>> GetEntries();
     protected virtual bool AllDirectories { get; } = false;
 
-    public abstract Task OnChange();
+    public abstract Task OnChange(IEnumerable<T> entries);
 
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
         var entries = await GetEntries();
-        entries.Live(OnChange, AllDirectories, cts);
+        entries.Live(() => OnChange(entries), AllDirectories, cts);
     }
 
     Task IHostedService.StopAsync(CancellationToken cancellationToken)
