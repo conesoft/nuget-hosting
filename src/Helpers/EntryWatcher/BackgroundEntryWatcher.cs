@@ -1,0 +1,28 @@
+﻿using Conesoft.Files;
+using Microsoft.Extensions.Hosting;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Conesoft.Hosting;
+
+public abstract class BackgroundEntryWatcher() : IHostedService
+{
+    readonly CancellationTokenSource cts = new();
+
+    protected abstract Task<Entry> GetEntry();
+    protected virtual bool AllDirectories { get; } = false;
+
+    public abstract Task OnChange();
+
+    async Task IHostedService.StartAsync(CancellationToken cancellationToken)
+    {
+        var entry = await GetEntry();
+        entry.Live(OnChange, AllDirectories, cts);
+    }
+
+    Task IHostedService.StopAsync(CancellationToken cancellationToken)
+    {
+        cts.Cancel();
+        return Task.CompletedTask;
+    }
+}
