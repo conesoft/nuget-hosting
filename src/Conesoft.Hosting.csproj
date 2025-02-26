@@ -32,7 +32,7 @@
   <ItemGroup>
     <PackageReference Include="Conesoft.Files" Version="4.1.2" />
     <PackageReference Include="Conesoft.Notifications" Version="1.0.7" />
-    <PackageReference Include="Conesoft.PwaGenerator" Version="1.0.1" />
+    <PackageReference Include="Conesoft.PwaGenerator" Version="1.0.2" />
     <PackageReference Include="Conesoft.Users" Version="3.1.11" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Serilog" Version="4.2.0" />
