@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.ComponentModel;
@@ -10,7 +11,11 @@ namespace Conesoft.Hosting;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class AddCompiledHashCacheBusterExtension
 {
-    public static IServiceCollection AddCompiledHashCacheBuster(this IServiceCollection services) => services.AddSingleton<ApplicationBuildHash>();
+    public static Builder AddCompiledHashCacheBuster<Builder>(this Builder builder) where Builder : IHostApplicationBuilder
+    {
+        builder.Services.AddSingleton<ApplicationBuildHash>();
+        return builder;
+    }
 
     public static IApplicationBuilder UseCompiledHashCacheBuster(this IApplicationBuilder app, string cookieName = "Conesoft.ApplicationHash")
     {

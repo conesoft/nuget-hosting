@@ -17,7 +17,7 @@ public abstract class BackgroundEntryWatcher<T>() : IHostedService where T : Ent
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
         var entry = await GetEntry();
-        entry.Live(() => OnChange(entry), AllDirectories, cts);
+        entry.Live(() => OnChange(entry), cts.Token, AllDirectories);
     }
 
     Task IHostedService.StopAsync(CancellationToken cancellationToken)
