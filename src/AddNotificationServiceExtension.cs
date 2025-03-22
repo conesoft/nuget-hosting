@@ -10,7 +10,10 @@ public static class AddNotificationServiceExtension
 {
     public static Builder AddNotificationService<Builder>(this Builder builder) where Builder : IHostApplicationBuilder
     {
-        builder.AddNotificationService((HostEnvironment environment) => environment.Global.Storage);
+        builder.AddNotificationService((HostEnvironment environment) => new(
+            Root: environment.Global.Storage.ToString(),
+            Name: environment.ApplicationName
+        ));
         return builder;
     }
 }
