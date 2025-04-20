@@ -16,7 +16,13 @@ public abstract class PeriodicCache<T>(TimeSpan period) : PeriodicTask(period) w
         return content;
     }
 
-    protected override async Task Process() => content = await Generate();
+    protected virtual Task OnContentChanged(T content) => Task.CompletedTask;
+
+    protected override async Task Process()
+    {
+        content = await Generate();
+        await OnContentChanged(content);
+    }
 
     protected abstract Task<T> Generate();
 }
